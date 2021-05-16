@@ -28,6 +28,29 @@ app.get('/search/:word', (req, res) => {
     })
 });
 
+app.post('/post', (req, res) => {
+    config.apiClient.post('statuses/update', { status: req.body.message })
+    .then(results => {
+        res.send(results);
+    }).catch(error => {
+        res.send(error);
+    });
+});
+
+app.get('/tweets-by-id', (req, res) => {
+    const params = {
+        user_id: req.query.id,
+        count: 2, 
+        tweet_mode: 'extended'
+    };
+    config.apiClient.get('statuses/user_timeline', params)
+    .then(result => {
+        res.send(result);
+    }).catch(error => {
+        res.send(error);
+    });
+});
+
 app.listen(app.get('port'), () => {
     console.log('server running on port ' + config.port);
 });
