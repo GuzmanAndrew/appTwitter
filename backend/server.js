@@ -1,9 +1,12 @@
 const express = require('express');
-const config = require('./config');
+const cors = require('cors');
 const app = express();
 
-app.use(require('cors'));
-app.use(require('body-parser').json());
+const config = require('./config');
+app.set('port', config.port);
+
+app.use(express.json());
+app.use(cors());
 
 app.get('/tweets', (req, res) => {
     const params = {count: 9, tweet_mode: 'extended'};
@@ -25,6 +28,6 @@ app.get('/search/:word', (req, res) => {
     })
 });
 
-app.listen(config.port, () => {
-    console.log('server running on port ' + config.port );
+app.listen(app.get('port'), () => {
+    console.log('server running on port ' + config.port);
 });
